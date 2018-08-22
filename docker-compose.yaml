@@ -1,5 +1,5 @@
 # docker-compose.yaml
-version: '3.1'
+version: '3.7'
 services:
   consignment-cli:
     build: ./consignment-cli
@@ -12,7 +12,7 @@ services:
     environment:
       MICRO_ADDRESS: ":50051"
       MICRO_REGISTRY: "mdns"
-      DB_HOST: "datastore:27017"
+      DB_HOST: "192.168.31.168:27017"
   vessel-service:
     build: ./vessel-service
     ports:
