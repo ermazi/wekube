@@ -1,17 +1,20 @@
 package main
+
 import (
 	"encoding/json"
+	microclient "github.com/micro/go-micro/client"
+	"github.com/micro/go-micro/cmd"
+	pb "github.com/wekube/consignment-service/proto/consignment"
+	"golang.org/x/net/context"
 	"io/ioutil"
 	"log"
 	"os"
-	pb "github.com/wekube/consignment-service/proto/consignment"
-	"golang.org/x/net/context"
-		"github.com/micro/go-micro/cmd"
-	microclient "github.com/micro/go-micro/client"
 )
+
 const (
 	defaultFilename = "consignment.json"
 )
+
 func parseFile(file string) (*pb.Consignment, error) {
 	var consignment *pb.Consignment
 	data, err := ioutil.ReadFile(file)
@@ -39,7 +42,6 @@ func main() {
 		log.Fatalf("Could not create consignment: %v", err)
 	}
 	log.Printf("Created: %t", r.Created)
-
 
 	getAll, err := client.GetConsignments(context.Background(), &pb.GetRequest{})
 	if err != nil {
