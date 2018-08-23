@@ -9,7 +9,6 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"sync"
 )
 
 const (
@@ -30,7 +29,7 @@ func parseFile(file string) (*pb.Consignment, error) {
 func main() {
 	cmd.Init()
 	client := pb.NewShippingServiceClient("go.micro.srv.consignment", microclient.DefaultClient)
-	wg := sync.WaitGroup{}
+	//wg := sync.WaitGroup{}
 	// Contact the server and print out its response.
 	file := defaultFilename
 	if len(os.Args) > 1 {
@@ -40,19 +39,20 @@ func main() {
 	if err != nil {
 		log.Fatalf("Could not parse file: %v", err)
 	}
-	for i := 0; i <= 10000 ; i++ {
-		wg.Add(1)
-		go func(i int, wg *sync.WaitGroup) {
-			r, err := client.CreateConsignment(context.TODO(), consignment)
-			if err != nil {
-				log.Fatalf("Could not create consignment: %v", err)
-			}
-			log.Printf("Created: %t %v", r.Created, i)
-			wg.Done()
-		}(i, &wg)
-	}
+	//for i := 0; i <= 10000 ; i++ {
+	//	wg.Add(1)
+	//go func(i int, wg *sync.WaitGroup) {
 
-	wg.Wait()
+	r, err := client.CreateConsignment(context.Background(), consignment)
+	if err != nil {
+		log.Printf("Could not create consignment: %v", err)
+		panic(err)
+	}
+	log.Printf("Created: %v", r.Created)
+	//		wg.Done()
+	//	}(i, &wg)
+	//
+	//wg.Wait()
 	//getAll, err := client.GetConsignments(context.Background(), &pb.GetRequest{})
 	//if err != nil {
 	//	log.Fatalf("Could not list consignments: %v", err)
